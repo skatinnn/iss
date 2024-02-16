@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISS Tracker</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: url('https://t4.ftcdn.net/jpg/05/56/16/81/360_F_556168144_qEINHd6qUsQH4b6wDvgOS0WtuShVwJVm.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            border-width: 0in;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #iss-info {
+            position: absolute;
+            top: 725px;
+            left: 250px;
+            background: rgba(0, 89, 255, 0.562);
+            padding: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="iss-info">
+        <h2>ISS Current Position</h2>
+        <p id="iss-position">Loading...</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const issPositionElement = document.getElementById('iss-position');
+
+            function getISSPosition() {
+                fetch('https://api.wheretheiss.at/v1/satellites/25544')
+                    .then(response => response.json())
+                    .then(data => {
+                        const { latitude, longitude, altitude } = data;
+                        issPositionElement.innerHTML = `Latitude: ${latitude.toFixed(2)}°, Longitude: ${longitude.toFixed(2)}°, Altitude: ${altitude.toFixed(2)} km`;
+                    })
+                    .catch(error => console.error('Error fetching ISS data:', error));
+            }
+            getISSPosition();
+            setInterval(getISSPosition, 1000);
+        });
+    </script>
+</body>
+</html>
